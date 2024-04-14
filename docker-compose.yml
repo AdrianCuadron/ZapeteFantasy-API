@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  api:
+    build: app/.
+    restart: always
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      POSTGRES_IP: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Cuadri11#
+      POSTGRES_DB: zapeteFantasy
+      FIREBASE_CREDENTIALS: /app/zapetefantasy-firebase-adminsdk-rxr2g-897f388612.json
+      IMAGES_PATH: /app/images
+
+    volumes:
+      - "/root/zapeteFantasy/api/images:/app/images"
+
+    depends_on:
+      - postgres
+
+  postgres:
+    build: db/.
+    restart: always
+
+    user: postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Cuadri11#
+      POSTGRES_DB: zapeteFantasy
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+      postgres_data: 
