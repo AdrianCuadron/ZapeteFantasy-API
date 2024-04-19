@@ -20,6 +20,13 @@ CREATE TABLE player (
     state VARCHAR(255)
 );
 
+CREATE TABLE post (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(255),
+    user_id VARCHAR(255),
+    texto TEXT
+);
+
 INSERT INTO users (username, hashed_password, name, last_name, points, money)
 VALUES 
     ('admin', '$2b$12$3VwSck4F9.VRwvn.6rWF0OXFGOBqASf3I3OpwnuuH.IyyBWn5sW4S', 'Admin', 'Admin', 0, 200.0),
@@ -151,3 +158,9 @@ INSERT INTO player (name, user_id, team, position, line_up, points, price, state
 ('Pau Torres', NULL, 'Villarreal', 'DF', false, 42, 8.8, 'Lesionado'),
 ('Paco Alcácer', NULL, 'Villarreal', 'PT', false, 48, 10.2, 'Disponible'),
 ('Yeremy Pino', NULL, 'Villarreal', 'DL', false, 60, 12.0, 'Disponible');
+
+INSERT INTO post (tipo, user_id, texto) VALUES
+
+('compra', 'admin','ha comprado a Joselu Mato'),
+('venta', 'admin','ha vendido a Maxi Gómez'),
+('publicacion', 'admin', 'hola que tal');

@@ -40,7 +40,21 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
-        
+    
+class PostBase(BaseModel):
+    tipo: str
+    user_id: str
+    texto: str
+    
+class PostCreate(PostBase):
+    pass
+
+class Post(PostBase):
+    id: int
+    
+    class Config:
+        orm_mode = True
+    
 
 #------------------------------------------------------------
 #  TOKEN

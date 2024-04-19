@@ -34,4 +34,11 @@ class Player(Base):
 
     user = relationship("User", back_populates="players")
     
-    
+# post class
+class Post(Base):
+    __tablename__ = "post"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    tipo = Column(String, index=True)
+    user_id = Column(String)
+    texto = Column(String)

@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 import logging
 from os import environ
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from mimetypes import guess_extension
 
 import crud, models, schemas
@@ -100,6 +100,14 @@ def read_users(skip: int = 0, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip)
     return users
 
+#update user
+@app.put("/users/", response_model=schemas.User)
+def update_user(money: float, points: int, current_user: models.User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    db_user = crud.get_user(db, username= current_user.username)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return crud.update_user(db=db, username=current_user.username, money=money, points= points)
+
 
 @app.get("/profile/image", tags=["Profile"],
          status_code=200, response_class=FileResponse,
@@ -142,6 +150,14 @@ def read_players(skip: int = 0, db: Session = Depends(get_db)):
     print(players[0].user_id, flush=True) #llega None si no tiene dueño
     return players
 
+# update player user_id
+@app.put("/players/", response_model=schemas.Player)
+def update_player(player_id: int, line_up: bool, user_id: Optional[str] = None, db: Session = Depends(get_db)):
+    db_player = crud.get_player(db, player_id=player_id)
+    if db_player is None:
+        raise HTTPException(status_code=404, detail="Player not found")
+    return crud.update_player(db=db, player_id=player_id, line_up= line_up, user_id=user_id)
+
 
 @app.get("/users/{user_id}", response_model=schemas.User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
@@ -150,6 +166,16 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+#get post
+@app.get("/posts/", response_model=List[schemas.Post])
+def read_posts(skip: int = 0, db: Session = Depends(get_db)):
+    posts = crud.get_posts(db, skip=skip)
+    return posts
+
+# create post
+@app.post("/posts/", response_model=schemas.Post)
+def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)):
+    return crud.create_post(db=db, post=post)
 
 # FIREBASE 
 
