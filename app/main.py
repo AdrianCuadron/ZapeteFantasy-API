@@ -90,7 +90,7 @@ async def read_users_me(current_user: models.User = Depends(get_current_active_u
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, username=user.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=409, detail="Username already registered")
     user.hashed_password = get_password_hash(user.hashed_password)
     return crud.create_user(db=db, user=user)
 
